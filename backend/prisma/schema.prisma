@@ -20,6 +20,6 @@ model Vehicle{
   fuelTypeId String
   referenceMonth Int
   referenceYear Int
-  vehicle Int
-  modelID String
+  vehicleYear Int
+  modelId String
 }
