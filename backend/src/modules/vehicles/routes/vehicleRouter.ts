@@ -14,8 +14,10 @@ vehicleRoutes.post("/vehicles", async (req, res) => {
 
   try {
     await createVehicle.execute({ id,fipeCode,value,fuelTypeId, referenceMonth,referenceYear,vehicleYear,modelId});
+    console.log("Veiculo Criado com Sucesso!")
     return res.status(201).json({ message: "Veículo criado com sucesso!" });
   } catch (error) {
+    console.error("error ao criar veiculo", error);
     return res.status(500).json({ error: "Erro ao criar veículo." });
   }
 });

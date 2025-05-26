@@ -31,4 +31,9 @@ export class PrismaVehicleRepository implements IVehicleRepository{
                         vehicleData.fuelTypeId,vehicleData.referenceMonth,vehicleData.referenceYear,
                         vehicleData.vehicleYear,vehicleData.modelId)
     }
+
+    async findAll(): Promise<Vehicle[]>{
+        const viewVehicles = await this.prisma.vehicle.findMany();
+        return viewVehicles
+    }
 }
