@@ -4,6 +4,8 @@ import { PrismaVehicleRepository } from "../repositories/PrismaVehicleRepository
 import { CreateVehiclesUseCase } from "../useCases/createVehiclesUseCase";
 import { prisma } from "../infra/prisma/prismaClient";
 import { FindAllVehiclesUseCase } from "../useCases/findAllVehiclesUseCase";
+import { Vehicle } from "../entities/vehicle";
+import { updateVehicleUseCase } from "../useCases/updateVehicleUseCase";
 
 const vehicleRoutes = Router();
 
@@ -34,5 +36,21 @@ vehicleRoutes.get("/", async (req, res) => {
         return res.status(500).json({ error: "Erro ao criar veículo." });
     }
 });
+
+vehicleRoutes.put("/:id", async (req, res) => {
+  const {id} = req.params;
+  const {fipeCode,value,fuelTypeId, referenceMonth,referenceYear,vehicleYear,modelId} = requestAnimationFrame.body
+  const vehicle = new Vehicle(id,fipeCode,value,fuelTypeId,referenceMonth,referenceYear,vehicleYear,modelId);
+  try{
+    const vechicleRepository = new PrismaVehicleRepository(prisma)
+    const updateVehicles = new updateVehicleUseCase(vechicleRepository)
+
+    await updateVehicles.execute(vehicle)
+    return res.status(204).send();
+  }catch(error){
+    console.error("Error ao atualizar o veiculo", error)
+    return res.status(500).json({error:"ERROR"})
+  }
+})
 
 export { vehicleRoutes };
