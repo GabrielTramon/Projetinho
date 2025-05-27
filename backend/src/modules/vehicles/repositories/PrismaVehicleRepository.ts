@@ -36,4 +36,19 @@ export class PrismaVehicleRepository implements IVehicleRepository{
         const viewVehicles = await this.prisma.vehicle.findMany();
         return viewVehicles
     }
+
+    async update(vehicle: Vehicle): Promise<void>{
+        await this.prisma.vehicle.update({
+            where: {id: vehicle.id},
+            data:{
+                fipeCode: vehicle.fipeCode,
+                value: vehicle.value,
+                fuelTypeId: vehicle.fuelTypeId,
+                referenceMonth: vehicle.referenceMonth,
+                referenceYear: vehicle.referenceYear,
+                vehicleYear: vehicle.vehicleYear,
+                modelId: vehicle.modelId
+            },
+        });
+    }
 }

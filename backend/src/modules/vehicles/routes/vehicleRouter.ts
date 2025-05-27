@@ -3,6 +3,7 @@ import { Router } from "express";
 import { PrismaVehicleRepository } from "../repositories/PrismaVehicleRepository";
 import { CreateVehiclesUseCase } from "../useCases/createVehiclesUseCase";
 import { prisma } from "../infra/prisma/prismaClient";
+import { FindAllVehiclesUseCase } from "../useCases/findAllVehiclesUseCase";
 
 const vehicleRoutes = Router();
 
@@ -20,6 +21,18 @@ vehicleRoutes.post("/vehicles", async (req, res) => {
     console.error("error ao criar veiculo", error);
     return res.status(500).json({ error: "Erro ao criar veículo." });
   }
+});
+
+vehicleRoutes.get("/", async (req, res) => {
+    try{
+        const vehiclesRepository = new PrismaVehicleRepository(prisma);
+        const findAllVehicles = new FindAllVehiclesUseCase(vehiclesRepository);
+        const vehicles = await findAllVehicles.execute();
+        return res.json(vehicles)
+    }catch(error){
+        console.error("Error", error);
+        return res.status(500).json({ error: "Erro ao criar veículo." });
+    }
 });
 
 export { vehicleRoutes };
