@@ -6,6 +6,7 @@ import { prisma } from "../infra/prisma/prismaClient";
 import { FindAllVehiclesUseCase } from "../useCases/findAllVehiclesUseCase";
 import { Vehicle } from "../entities/vehicle";
 import { updateVehicleUseCase } from "../useCases/updateVehicleUseCase";
+import { DeleteVehiclesUseCase } from "../useCases/deleteVehicleUseCase";
 
 const vehicleRoutes = Router();
 
@@ -39,12 +40,13 @@ vehicleRoutes.get("/", async (req, res) => {
 
 vehicleRoutes.put("/:id", async (req, res) => {
   const {id} = req.params;
-  const {fipeCode,value,fuelTypeId, referenceMonth,referenceYear,vehicleYear,modelId} = requestAnimationFrame.body
-  const vehicle = new Vehicle(id,fipeCode,value,fuelTypeId,referenceMonth,referenceYear,vehicleYear,modelId);
-  try{
-    const vechicleRepository = new PrismaVehicleRepository(prisma)
-    const updateVehicles = new updateVehicleUseCase(vechicleRepository)
+  const {fipeCode,value,fuelTypeId, referenceMonth,referenceYear,vehicleYear,modelId} = req.body
 
+  const vehicle = new Vehicle(id,fipeCode,value,fuelTypeId,referenceMonth,referenceYear,vehicleYear,modelId);
+
+  try{
+    const vehicleRepository  = new PrismaVehicleRepository(prisma)
+    const updateVehicles = new updateVehicleUseCase(vehicleRepository )
     await updateVehicles.execute(vehicle)
     return res.status(204).send();
   }catch(error){
@@ -52,5 +54,19 @@ vehicleRoutes.put("/:id", async (req, res) => {
     return res.status(500).json({error:"ERROR"})
   }
 })
+
+vehicleRoutes.delete("/vehicles/:id", async (req, res) => {
+  const { id } = req.params;
+  const vehicleRepository = new PrismaVehicleRepository(prisma);
+  const deleteVehicle = new DeleteVehiclesUseCase(vehicleRepository);
+
+  try {
+    await deleteVehicle.execute(id);
+    return res.status(200).json({ message: "Veículo deletado com sucesso!" });
+  } catch (error) {
+    console.error("Erro ao deletar veículo:", error);
+    return res.status(500).json({ error: "Erro ao deletar veículo." });
+  }
+});
 
 export { vehicleRoutes };

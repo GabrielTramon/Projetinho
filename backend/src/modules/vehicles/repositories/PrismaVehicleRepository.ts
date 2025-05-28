@@ -51,4 +51,9 @@ export class PrismaVehicleRepository implements IVehicleRepository{
             },
         });
     }
+    async delete(id: string): Promise<void> {
+        await this.prisma.vehicle.delete({
+            where: { id },
+        });
+    }
 }
