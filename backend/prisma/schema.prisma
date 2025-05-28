@@ -23,3 +23,15 @@ model Vehicle{
   vehicleYear Int
   modelId String
 }
+
+model Brand{
+  id String @id @default(uuid())
+  name String
+  fipeCode String
+}
+
+model fuelTypeId{
+  id String @id @default(uuid())
+  name String
+  abbreviations String
+}

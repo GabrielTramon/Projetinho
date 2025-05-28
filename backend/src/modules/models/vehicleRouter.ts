@@ -7,7 +7,7 @@ import { FindAllVehiclesUseCase } from "../useCases/findAllVehiclesUseCase";
 import { Vehicle } from "../entities/vehicle";
 import { updateVehicleUseCase } from "../useCases/updateVehicleUseCase";
 import { DeleteVehiclesUseCase } from "../useCases/deleteVehicleUseCase";
-import { findByIdVehicleUseCase } from "../useCases/findByIdVehiclesUseCase";
+import { findByIdUseCase, findByIdVehicleUseCase } from "../useCases/findByIdVehiclesUseCase";
 
 const vehicleRoutes = Router();
 
@@ -53,12 +53,12 @@ vehicleRoutes.get("/vehicles/vehicle/:id", async (req, res) => {
   }
 })
 
-vehicleRoutes.put("/vehicles/vehicle/:id", async (req, res) => {
+vehicleRoutes.put("/vehicles/:id", async (req, res) => {
   const {id} = req.params;
   const {fipeCode,value,fuelTypeId, referenceMonth,referenceYear,vehicleYear,modelId} = req.body
 
   const vehicle = new Vehicle(id,fipeCode,value,fuelTypeId,referenceMonth,referenceYear,vehicleYear,modelId);
-  
+
   try{
     const vehicleRepository  = new PrismaVehicleRepository(prisma)
     const updateVehicles = new updateVehicleUseCase(vehicleRepository )
@@ -70,7 +70,7 @@ vehicleRoutes.put("/vehicles/vehicle/:id", async (req, res) => {
   }
 })
 
-vehicleRoutes.delete("/vehicles/vehicle/:id", async (req, res) => {
+vehicleRoutes.delete("/vehicles/:id", async (req, res) => {
   const { id } = req.params;
   const vehicleRepository = new PrismaVehicleRepository(prisma);
   const deleteVehicle = new DeleteVehiclesUseCase(vehicleRepository);
