@@ -7,6 +7,7 @@ import { FindAllVehiclesUseCase } from "../useCases/findAllVehiclesUseCase";
 import { Vehicle } from "../entities/vehicle";
 import { updateVehicleUseCase } from "../useCases/updateVehicleUseCase";
 import { DeleteVehiclesUseCase } from "../useCases/deleteVehicleUseCase";
+import { findByIdUseCase, findByIdVehicleUseCase } from "../useCases/findByIdVehiclesUseCase";
 
 const vehicleRoutes = Router();
 
@@ -26,7 +27,7 @@ vehicleRoutes.post("/vehicles", async (req, res) => {
   }
 });
 
-vehicleRoutes.get("/", async (req, res) => {
+vehicleRoutes.get("/vehicles/all", async (req, res) => {
     try{
         const vehiclesRepository = new PrismaVehicleRepository(prisma);
         const findAllVehicles = new FindAllVehiclesUseCase(vehiclesRepository);
@@ -38,7 +39,21 @@ vehicleRoutes.get("/", async (req, res) => {
     }
 });
 
-vehicleRoutes.put("/:id", async (req, res) => {
+vehicleRoutes.get("/vehicles/:id", async (req, res) => {
+  const {id} = req.params;
+
+  try{
+    const vehicleRepository = new PrismaVehicleRepository(prisma);
+    const findByIdVehicles = new findByIdVehicleUseCase(vehicleRepository);
+    const vehicles = await findByIdVehicles.execute(id);
+    return res.json(vehicles)
+  }catch(error){
+    console.error("Error", error);
+    return res.status(500).json({ error: "Erro ao visualizar o veiculo com id"})
+  }
+})
+
+vehicleRoutes.put("/vehicles/:id", async (req, res) => {
   const {id} = req.params;
   const {fipeCode,value,fuelTypeId, referenceMonth,referenceYear,vehicleYear,modelId} = req.body
 
