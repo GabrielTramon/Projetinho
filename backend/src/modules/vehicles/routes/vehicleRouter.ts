@@ -39,7 +39,7 @@ vehicleRoutes.get("/vehicles/all", async (req, res) => {
     }
 });
 
-vehicleRoutes.get("/vehicles/:id", async (req, res) => {
+vehicleRoutes.get("/vehicles/vehicle/:id", async (req, res) => {
   const {id} = req.params;
 
   try{
