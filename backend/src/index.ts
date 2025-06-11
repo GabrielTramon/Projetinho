@@ -1,10 +1,12 @@
 // src/server.ts
+import "reflect-metadata";
 import express from "express";
-import { vehicleRoutes } from "./modules/vehicles/routes/vehicleRouter";
+import { userRoutes } from "./modules/users/routes/userRouter";
 
 const app = express();
-
 app.use(express.json());
-app.use(vehicleRoutes);
+
+app.use("/", userRoutes)
+
 
 app.listen(3001, () => console.log("Server running at http://localhost:3001"));
